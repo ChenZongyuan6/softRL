@@ -37,8 +37,11 @@ def extract_and_average_mocap_data(valid_indices_file, mocap_file, mocap_average
     mocap_means_df.to_csv(mocap_average_output_file, index=False)
     print(f"每段动捕数据的均值已保存到: {mocap_average_output_file}")
 
-processed_pressure_data = "D:/A Research/softRL/Dat03022_processed_3d_win30.csv"
-mocap_data_input = "D:/A Research/softRL/mocapdata_input_3022_282260.csv"
-mocap_data_processed = "D:/A Research/softRL/mocapdata_3022_28226_processed.csv"
+# processed_pressure_data = "D:/A Research/softRL/Dat03022_processed_3d_win30.csv"
+# mocap_data_input = "D:/A Research/softRL/mocapdata_input_3022_282260.csv"
+# mocap_data_processed = "D:/A Research/softRL/mocapdata_3022_28226_processed.csv"
+processed_pressure_data = "D:/A Research/softRL/Dat0302_processed_3d_win30_2.csv"
+mocap_data_input = "D:/A Research/softRL/mocapdata_input.csv"
+mocap_data_processed = "D:/A Research/softRL/mocapdata_processed.csv"
 # 示例调用
 extract_and_average_mocap_data(processed_pressure_data, mocap_data_input, mocap_data_processed)

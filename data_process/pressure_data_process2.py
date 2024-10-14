@@ -43,12 +43,12 @@ def process_data(input_file, output_file, window_size=30, threshold1=0.5, thresh
     result_df = pd.DataFrame(valid_data, columns=['Start Time', 'Duration', 'X Mean', 'Y Mean', 'Z Mean'])
 
     # 输出结果到新的CSV文件
-    result_df.to_csv(output_file, index=False)
+    result_df.to_csv(output_file, index=False, header=False)
 
     return df, result_df  # 返回原始数据和有效数据段
 
 
-def visualize_data(df, result_df, num_points=280000):
+def visualize_data(df, result_df, num_points=20000):
     # 只取前 num_points 个数据进行可视化
     df = df.iloc[:num_points]
 
@@ -100,8 +100,8 @@ def visualize_data(df, result_df, num_points=280000):
 
 # 示例调用
 
-input_data = "D:/A Research/softRL/Dat03022_input.csv"
-processed_data = "D:/A Research/softRL/Dat03022_processed_3d_win25.csv"
+input_data = "D:/A Research/softRL/Dat0302_input.csv"
+processed_data = "D:/A Research/softRL/Dat0302_processed_3d_win30_2.csv"
 df, result_df =process_data(input_data, processed_data)
 
-visualize_data(df, result_df, num_points=280000)
+visualize_data(df, result_df, num_points=20000)
