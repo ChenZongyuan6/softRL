@@ -60,8 +60,8 @@ def train_network(model, dataloader, epochs=100, lr=0.001):
     print(f"Total Training Time: {total_time:.2f} seconds")
 
     # 保存训练好的模型
-    torch.save(model.state_dict(), "trained_model.pth")
-    print("模型已保存到 trained_model.pth")
+    torch.save(model.state_dict(), "trained_model2.pth")
+    print("模型已保存到 trained_model2.pth")
 
     # 绘制loss收敛曲线
     plt.figure()  # 新建一个图形窗口
@@ -81,9 +81,10 @@ if __name__ == "__main__":
     pressure_file = "D:/A Research/softRL/Dat03022_processed_3d_win30.csv"
     position_file = "D:/A Research/softRL/mocapdata_3022_28226_processed.csv"
 
+
     # 加载数据
     dataloader = load_data(pressure_file, position_file)
     # 创建网络模型
     model = PressureToPositionNet()
     # 训练模型
-    train_network(model, dataloader, epochs=100, lr=0.001)
+    train_network(model, dataloader, epochs=35, lr=0.001)
