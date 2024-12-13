@@ -8,7 +8,7 @@ class PressureToPositionNet(nn.Module):
         super(PressureToPositionNet, self).__init__()
         # 输入层到第一个隐藏层，100个神经元，激活函数为Sigmoid
         self.fc1 = nn.Linear(3, 100)
-        self.sigmoid = nn.Sigmoid()
+        self.sigmoid = nn.ReLU()
 
         # 第一个隐藏层到第二个隐藏层，100个神经元，线性传递函数
         self.fc2 = nn.Linear(100, 100)
@@ -17,9 +17,11 @@ class PressureToPositionNet(nn.Module):
         self.fc3 = nn.Linear(100, 15)
 
     def forward(self, x):
-        x = self.sigmoid(self.fc1(x))  # 第一个隐藏层，激活函数为Sigmoid
-        x = self.fc2(x)  # 第二个隐藏层，线性传递
+        x = self.relu(self.fc1(x))  # 第一个隐藏层，激活函数为Sigmoid
+        # x = self.fc2(x)  # 第二个隐藏层，线性传递
+        x = self.relu(self.fc2(x))  # 第二层使用 ReLU 激活
         x = self.fc3(x)  # 输出层，线性传递
+
         return x
 
 

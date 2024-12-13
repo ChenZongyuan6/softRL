@@ -5,7 +5,7 @@ from torch.utils.data import DataLoader, TensorDataset
 import matplotlib.pyplot as plt  # 导入 matplotlib
 import time
 
-from nn_models.nn_model import PressureToPositionNet  # 从model.py导入网络
+from nn_model import PressureToPositionNet  # 从model.py导入网络
 
 
 # 读取气压输入和位置输出的数据
@@ -24,6 +24,20 @@ def load_data(pressure_file, position_file, batch_size=32):
 
     return dataloader
 
+def weighted_mse_loss(output, target):
+    """
+    自定义加权均方误差损失函数
+    :param output: 模型预测的输出
+    :param target: 实际的目标值
+    :return: 加权后的MSE损失
+    """
+    # 定义权重
+    weights = torch.ones_like(target)  #创建一个与 target 张量形状相同的全1张量
+    weights[:, 9:12] = 2.0  # 强化最后6维的权重
+    weights[:, 12:15] = 3.0  # 强化最后6维的权重
+    # 计算加权均方误差
+    loss = torch.mean(weights * (output - target) ** 2)
+    return loss
 
 # 训练神经网络
 def train_network(model, dataloader, epochs=100, lr=0.001):
@@ -60,7 +74,7 @@ def train_network(model, dataloader, epochs=100, lr=0.001):
     print(f"Total Training Time: {total_time:.2f} seconds")
 
     # 保存训练好的模型
-    torch.save(model.state_dict(), "../trained_model2.pth")
+    torch.save(model.state_dict(), "../nn_models/trained_model2.pth")
     print("模型已保存到 trained_model2.pth")
 
     # 绘制loss收敛曲线
@@ -78,9 +92,10 @@ def train_network(model, dataloader, epochs=100, lr=0.001):
 # 主程序
 if __name__ == "__main__":
     # 文件路径
+    # pressure_file = "D:/A Research/softRL/Dat03022_processed_3d_win30.csv"
+    # position_file = "D:/A Research/softRL/mocapdata_3022_28226_processed.csv"
     pressure_file = "D:/A Research/softRL/Dat03022_processed_3d_win30.csv"
     position_file = "D:/A Research/softRL/mocapdata_3022_28226_processed.csv"
-
 
     # 加载数据
     dataloader = load_data(pressure_file, position_file)
