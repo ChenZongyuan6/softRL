@@ -5,7 +5,7 @@ from torch.utils.data import DataLoader, TensorDataset
 import matplotlib.pyplot as plt  # 导入 matplotlib
 import time
 
-from nn_model import PressureToPositionNet  # 从model.py导入网络
+from nn_models.nn_model import PressureToPositionNet  # 从model.py导入网络
 
 
 # 读取气压输入和位置输出的数据
@@ -60,7 +60,7 @@ def train_network(model, dataloader, epochs=100, lr=0.001):
     print(f"Total Training Time: {total_time:.2f} seconds")
 
     # 保存训练好的模型
-    torch.save(model.state_dict(), "trained_model2.pth")
+    torch.save(model.state_dict(), "../trained_model2.pth")
     print("模型已保存到 trained_model2.pth")
 
     # 绘制loss收敛曲线
