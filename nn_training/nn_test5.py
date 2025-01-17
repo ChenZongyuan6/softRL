@@ -136,7 +136,8 @@ if __name__ == "__main__":
 
     # 加载训练好的模型参数
     # model.load_state_dict(torch.load('../nn_models/nn_model_1123best.pth'))
-    model.load_state_dict(torch.load('../nn_models/trained_nn_model8_same_weight.pth'))
+    # model.load_state_dict(torch.load('../nn_models/trained_nn_model8_same_weight.pth'))
+    model.load_state_dict(torch.load('../nn_models/trained_nn_model10_swgt_fixRseed_centered.pth'))
     print("模型已加载")
 
     # 评估模型并记录每个批次的误差，同时计算总的平均误差

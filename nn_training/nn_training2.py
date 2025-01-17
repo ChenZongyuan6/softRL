@@ -18,7 +18,7 @@ def load_data(pressure_file, position_file, batch_size=32):
     pressure_data = pd.read_csv(pressure_file)
     position_data = pd.read_csv(position_file)
 
-    # 假设气压输入和位置输出数据分别在第2到4列和第2到16列
+    # 假设气压输入和位置输出数据分别在第2到4列和第0到15列
     X = torch.tensor(pressure_data.iloc[:, 2:5].values, dtype=torch.float32)  # 气压输入
     y = torch.tensor(position_data.iloc[:, 0:15].values, dtype=torch.float32)  # 位置输出
 
@@ -27,7 +27,7 @@ def load_data(pressure_file, position_file, batch_size=32):
 
     # **修改部分：将数据集随机分成90%的训练集和10%的验证集**
     total_size = len(dataset)
-    train_size = int(0.9 * total_size)
+    train_size = int(0.8 * total_size)
     val_size = total_size - train_size
     train_dataset, val_dataset = random_split(dataset, [train_size, val_size])
 
@@ -90,7 +90,7 @@ def train_network(model, train_loader, val_loader, epochs=100, lr=0.001, patienc
         print(f"Epoch [{epoch + 1}/{epochs}], Training Loss: {avg_loss}")
 
         # **修改部分：每隔5个epoch验证一次模型在验证集上的loss**
-        if (epoch + 1) % 5 == 0:
+        if (epoch + 1) % 10 == 0:
             model.eval()  # 设置模型为评估模式
             val_running_loss = 0.0
             with torch.no_grad():
@@ -120,7 +120,8 @@ def train_network(model, train_loader, val_loader, epochs=100, lr=0.001, patienc
 
     # 保存最佳模型
     if best_model_state is not None:
-        save_path = "../nn_models/trained_nn_model10_swgt_fixRseed_centered.pth"  ###############
+        # save_path = "../nn_models/trained_nn_model10_swgt_fixRseed_centered.pth"  ###############
+        save_path = "../nn_models/30_trained_nn_model_202412_4.pth"  ###############
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
         torch.save(best_model_state, save_path)
         print(f"Best model saved to {save_path}.")
@@ -133,7 +134,7 @@ def train_network(model, train_loader, val_loader, epochs=100, lr=0.001, patienc
 
     # **修改部分：绘制训练和验证的loss曲线**
     # 定义基础保存路径
-    base_save_path = "D:/A Research/softRL/outputs/trained_nn_model10_swgt_fixRseed_centered" ##########
+    base_save_path = "D:/A Research/softRL/outputs/30_trained_nn_model_202412_4" ##########
     # 动态创建目录
     os.makedirs(base_save_path, exist_ok=True)
 
@@ -186,9 +187,12 @@ if __name__ == "__main__":
     print(f"Using device: {device}")
 
     # 文件路径
-    pressure_file = "D:/A Research/softRL/Dat03022_processed_3d_win30.csv"   ###
+    # pressure_file = "D:/A Research/softRL/Dat03022_processed_3d_win30.csv"   ###
+    # # position_file = "D:/A Research/softRL/mocapdata_3022_28226_processed.csv"   ###
+    # position_file = "D:/A Research/softRL/data_centered/mocapdata_3022_centered.csv" ###
+    pressure_file = "D:/A Research/softRL/softRL/data_202412/final/30_Data_total_pressure.csv"   ###
     # position_file = "D:/A Research/softRL/mocapdata_3022_28226_processed.csv"   ###
-    position_file = "D:/A Research/softRL/data_centered/mocapdata_3022_centered.csv" ###
+    position_file = "D:/A Research/softRL/softRL/data_202412/final/30_Take_total_processed_centered.csv" ###
 
     # 加载数据
     train_loader, val_loader = load_data(pressure_file, position_file)
