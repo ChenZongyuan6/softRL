@@ -2,6 +2,9 @@ import gymnasium as gym
 import numpy as np
 import torch
 
+# 检查是否能够使用 GPU（如果可用，使用 GTX 4090）
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(f"Using device: {device}")
 class NNEnvironment(gym.Env):
     metadata = {'render.modes': ['human']}
 
