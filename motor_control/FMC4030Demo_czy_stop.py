@@ -1,23 +1,11 @@
 # -*- coding: UTF-8 -*-
 from ctypes import *
 import time
-import socket
-# fmc4030 = windll.LoadLibrary('G:/Project/AMC4030_V2/DLL/FMC4030-Dll/Release/FMC4030-Dll.dll')
+
+# 加载动态链接库
 fmc4030 = windll.LoadLibrary('FMC4030Lib-x64-20220329/FMC4030-DLL.dll')
 
 # 定义设备状态类，用于获取设备状态数据
-# struct machine_status{
-#    float realPos[3];
-#   float realSpeed[3];
-#   unsigned int inputStatus;
-#   unsigned int outputStatus;
-#   unsigned int limitNStatus;
-#  unsigned int limitPStatus;
-#  unsigned int machineRunStatus;
-#  unsigned int axisStatus[MAX_AXIS];
-#  unsigned int homeStatus;
-#  char file[20][30];
-#  };
 class machine_status(Structure):
     _fields_ = [
         ("realPos", c_float * 3),
@@ -45,18 +33,18 @@ if connect_result == 0:
 else:
     print(f"设备连接失败，错误代码：{connect_result}")
 
-
 # 记录开始时间
 start_time = time.time()
 
 # 为三个电机发送驱动指令
-#最大速度参数：
-# print(fmc4030.FMC4030_Jog_Single_Axis(id, 0, c_float(-400), c_float(800), c_float(3000), c_float(3000), 1))  # 轴1
-# print(fmc4030.FMC4030_Jog_Single_Axis(id, 1, c_float(-400), c_float(800), c_float(3000), c_float(3000), 1))  # 轴2
-# print(fmc4030.FMC4030_Jog_Single_Axis(id, 2, c_float(-400), c_float(800), c_float(3000), c_float(3000), 1))  # 轴3
-print(fmc4030.FMC4030_Jog_Single_Axis(id, 0, c_float(-400), c_float(800), c_float(3000), c_float(3000), 1))  # 轴1
-print(fmc4030.FMC4030_Jog_Single_Axis(id, 1, c_float(-400), c_float(800), c_float(3000), c_float(3000), 1))  # 轴2
-print(fmc4030.FMC4030_Jog_Single_Axis(id, 2, c_float(-400), c_float(800), c_float(3000), c_float(3000), 1))  # 轴3
+print(fmc4030.FMC4030_Jog_Single_Axis(id, 0, c_float(-400), c_float(80), c_float(300), c_float(3000), 1))  # 轴1
+print(fmc4030.FMC4030_Jog_Single_Axis(id, 1, c_float(-400), c_float(80), c_float(300), c_float(3000), 1))  # 轴2
+print(fmc4030.FMC4030_Jog_Single_Axis(id, 2, c_float(-400), c_float(80), c_float(300), c_float(4000), 1))  # 轴3
+
+# 等待 2 秒后停止 2 号轴
+time.sleep(2)  # 延迟 2 秒
+print("2 秒已到，停止 2 号轴")
+fmc4030.FMC4030_Stop_Single_Axis(id, 2, 1)  # 停止 2 号轴
 
 # 等待三个轴全部运动完成
 while True:
@@ -73,12 +61,11 @@ while True:
     if stop_axis_1 == 1 and stop_axis_2 == 1 and stop_axis_3 == 1:
         break
 
-    time.sleep(0.1)  # 防止过高的轮询频率
+    time.sleep(0.02)  # 防止过高的轮询频率
 
 # 记录结束时间并计算总耗时
 end_time = time.time()
 print(f"三个轴运动完成，总耗时 {end_time - start_time:.2f} 秒")
 
-
 # 关闭控制器连接，使用完成一定调用此函数释放资源
-print("设备", fmc4030.FMC4030_Close_Device(id),"连接关闭")
+print("设备", fmc4030.FMC4030_Close_Device(id), "连接关闭")
